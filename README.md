@@ -1,2 +1,2 @@
 # Hackathon
-Repositiry for the SUDS Hackathon
+Repository for the SUDS Hackathon
