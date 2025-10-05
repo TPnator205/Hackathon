@@ -17,12 +17,10 @@ def summary_gen(content, ai_magic: OpenAI):
     You are an academic summarizer. Summarize the following lecture or notes clearly and accurately.
     Then provide 3-5 key insights or patterns from the content that would help a student understand the main ideas.
     
+    Summarize the following text clearly and concisely for university-level understanding.
+    Avoid Markdown or bullet formatting. Write in clear paragraphs.
+
     Text: {""" + content + """}
-    Return in this format:
-    {
-    "summary": "…",
-    "key_insights": ["…", "…", "…"]
-    }
     """
     
     response = ai_magic.chat.completions.create(
@@ -46,12 +44,19 @@ def formula_gen(content, ai_magic: OpenAI):
     - The context or topic it belongs to (if available)
 
     Text: {""" + content + """}
+    From the following text, extract:
+    1. All mathematical or scientific formulas
+    2. All key terms with short definitions
 
-    Return as JSON:
-    [
-    {"formula": "...", "meaning": "...", "context": "..."}
-    ]
+    Format the output like this:
+
+    📘 Key Terms:
+    - Term: Definition
+
+    🧮 Formulas:
+    - Formula: Explanation or where it applies
     """
+    
     response = ai_magic.chat.completions.create(
         model = "gpt-4o-mini",
         messages=[
@@ -70,14 +75,11 @@ def flashcards_gen(content, ai_magic: OpenAI):
     Each flashcard should have:
     - A front (question or term)
     - A back (concise explanation or answer)
-
+    
+    Do NOT use JSON or Markdown symbols.
+    
     Make them suitable for spaced repetition learning. Avoid redundancy.
     Text: { """ + content + """}
-    Return as JSON in this format:
-    [
-        {"front": "...", "back": "..."},
-        {"front": "...", "back": "..."}
-    ]
     """
     
     response = ai_magic.chat.completions.create(
@@ -89,6 +91,7 @@ def flashcards_gen(content, ai_magic: OpenAI):
         temperature=0.2
     )
     return response.choices[0].message.content
+    
     
 def quiz_gen(content, ai_magic:OpenAI):
 
@@ -105,22 +108,22 @@ def quiz_gen(content, ai_magic:OpenAI):
 
     Text: {""" + content + """}
 
-    Return in JSON format exactly like this:
-    {
-    "multiple_choice": [
-        {
-        "question": "...",
-        "options": ["A) ...", "B) ...", "C) ...", "D) ..."],
-        "correct_answer": "B"
-        }
-    ],
-    "short_answer": [
-        {
-        "question": "...",
-        "expected_answer": "..."
-        }
-    ]
-    }
+    Create a quiz from the following text. 
+    Include 5 multiple-choice questions and 3 short-answer questions.
+
+    Format like this:
+    1. [Question text]
+    A) Option 1
+    B) Option 2
+    C) Option 3
+    D) Option 4
+    Correct answer: [Letter]
+
+    Short Answer Questions:
+    1. [Question]
+    Expected answer: [Brief explanation]
+
+    Avoid JSON or Markdown symbols.
     """
     response = ai_magic.chat.completions.create(
         model = "gpt-4o-mini",
@@ -133,7 +136,6 @@ def quiz_gen(content, ai_magic:OpenAI):
     return response.choices[0].message.content
 
 
-
 if __name__ == "__main__":
     client = OpenAI(api_key="sk-proj-fgiK2JJBytLimDDWj-TgKTenrTWq5lVc6wkkfoAtKcuAV2j52HEzFK" +
                     "JImKl09XS6c6Jtl8KxjQT3BlbkFJA46oPAdG3DCxwG-DXITmthCNciQXwI73o1-HiaAuqu0BT" +
@@ -144,6 +146,6 @@ if __name__ == "__main__":
     
     # print(summary_gen(main(filename), client))
     # print(formula_gen(content_main, client))
-    print(formula_gen(content_main, client))
-    print(quiz_gen(content_main, client))
+    # print(formula_gen(content_main, client))
+    # print(quiz_gen(content_main, client))
     
