@@ -15,7 +15,7 @@ Requirements
 Make sure you have:
 	•	Python 3.9 or higher
 	•	An active internet connection (for API responses)
-	•	Your API key (if applicable — e.g., OpenAI, Gemini, etc.)
+	•	Your API key (if applicable e.g., OpenAI, Gemini, etc.)
 
 
 Example Use Cases
